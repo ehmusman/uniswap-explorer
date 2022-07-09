@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  client:
+    depends_on:
+      - server
+    build: ./uniswap-explorer-frontend
+    ports: 
+      - 2565:3000
+  server:
+    build: ./uniswap-explorer-backend 
+    ports: 
+      - 3821:5000
+    environment:
+      REDIS_URL: redis://cache
+    depends_on:
+      - cache
+  cache:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6378:6379'
+    volumes: 
+      - ./data:/data
